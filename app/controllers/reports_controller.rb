@@ -25,10 +25,9 @@ class ReportsController < ApplicationController
   # POST /reports.json
   def create
     @report = Report.new(report_params)
+    @report.repair_priority = (10 - @report.size) / 2
     respond_to do |format|
       if @report.save
-        @report.repair_priority = 10 - @report.size
-        @report.save
         format.html { redirect_to @report, notice: 'Report was successfully created.' }
         format.json { render :show, status: :created, location: @report }
       else
@@ -43,7 +42,7 @@ class ReportsController < ApplicationController
   def update
     respond_to do |format|
       if @report.update(report_params)
-        @report.repair_priority = 10 - @report.size
+        @report.repair_priority = (10 - @report.size) / 2
         @report.save
         format.html { redirect_to @report, notice: 'Report was successfully updated.' }
         format.json { render :show, status: :ok, location: @report }
