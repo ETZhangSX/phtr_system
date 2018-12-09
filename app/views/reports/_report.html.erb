@@ -1,0 +1,29 @@
+<li id="report-<%= report.id %>">
+  <span class="user"><strong>
+    <%= link_to report.user.name, report.user %>
+  </strong></span>
+  <span class="size"><strong>
+    Size:
+  </strong><%= report.size %></span>
+  <span class="address"><strong>
+    Address:
+  </strong><%= report.address %></span>
+  <span class="location"><strong>
+    Location:
+  </strong><%= report.location %></span>
+  <span class="district"><strong>
+    District:
+  </strong><%= report.district %></span>
+  <span class="repair priority"><strong>
+    Repair Priority:
+  </strong><%= report.repair_priority %></span>
+  <span class="delete">
+    <%= link_to 'Delete',
+                report,
+                method: :delete,
+                data: { confirm: 'Are you sure?' } %>
+  </span>
+  <span class="timestamp">
+    Reported <%= time_ago_in_words(report.created_at) %> ago.
+  </span>
+</li>

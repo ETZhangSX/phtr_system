@@ -1,5 +1,12 @@
+<% provide(:title, "New Report") %>
+<% provide(:button_text, "Create Report") %>
+
 <h1>New Report</h1>
 
-<%= render 'form', report: @report %>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= render 'form', report: @report %>
+  </div>
+</div>
 
-<%= link_to 'Back', reports_path %>
+<%= link_to 'Back', current_user %>

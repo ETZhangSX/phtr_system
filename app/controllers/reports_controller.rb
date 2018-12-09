@@ -1,5 +1,7 @@
 class ReportsController < ApplicationController
-  before_action :set_report, only: [:show, :edit, :update, :destroy]
+  before_action :logged_in_user,  only: [:create, :destroy]
+  before_action :correct_user,    only: :destroy
+  before_action :set_report,      only: [:show, :edit, :update, :destroy]
 
   # GET /reports
   # GET /reports.json
@@ -24,17 +26,26 @@ class ReportsController < ApplicationController
   # POST /reports
   # POST /reports.json
   def create
-    @report = Report.new(report_params)
-    @report.repair_priority = (10 - @report.size) / 2
-    respond_to do |format|
-      if @report.save
-        format.html { redirect_to @report, notice: 'Report was successfully created.' }
-        format.json { render :show, status: :created, location: @report }
-      else
-        format.html { render :new }
-        format.json { render json: @report.errors, status: :unprocessable_entity }
-      end
+    @report = current_user.reports.build(report_params)
+
+    if !!@report.size
+      @report.repair_priority = (10 - @report.size) / 2
     end
+
+    if @report.save
+      redirect_to @current_user
+    else
+      render 'new'
+    end
+    # respond_to do |format|
+    #   if @report.save
+    #     format.html { redirect_to @report, notice: 'Report was successfully created.' }
+    #     format.json { render :show, status: :created, location: @report }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @report.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # PATCH/PUT /reports/1
@@ -57,10 +68,7 @@ class ReportsController < ApplicationController
   # DELETE /reports/1.json
   def destroy
     @report.destroy
-    respond_to do |format|
-      format.html { redirect_to reports_url, notice: 'Report was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to current_user
   end
 
   private
@@ -72,6 +80,11 @@ class ReportsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def report_params
       params.require(:report).permit(:address, :size, :location, :district, :repair_priority, :user_id)
+    end
+
+    def correct_user
+      @report = current_user.reports.find_by(id: params[:id])
+      redirect_to root_url if @report.nil?
     end
 end
 

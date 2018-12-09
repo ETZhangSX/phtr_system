@@ -1,14 +1,33 @@
+<% provide(:title, @user.name) %>
 <p id="notice"><%= notice %></p>
+<div class="row">
+  <aside class="col-md-3">
+    <section class="user_info">
+      <h1>
+        <%= gravatar_for @user %>
+        <strong>
+          <%= @user.name %>
+        </strong>
+      </h1>
+      <p>
+        <%= @user.email %>
+      </p>
+    </section>
+  </aside>
+  <div class="col-md-8">
+    <% if @user.reports.any? %>
+    <h3>Reports (<%=@user.reports.count %>)</h3>
+      <ol class="reports">
+        <%= render @reports %>
+      </ol>
+      <%= will_paginate @reports %>
+    <% end %>
+  </div>
+  <div class="col-md-1">
+    <%= link_to 'Report', new_report_path, class:"btn btn-primary" %>
+  </div>
+</div>
 
-<p>
-  <strong>name:</strong>
-  <%= @user.name %>
-</p>
 
-<p>
-  <strong>Email:</strong>
-  <%= @user.email %>
-</p>
-
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<!--<%#= link_to 'Edit', edit_user_path(@user) %> |-->
+<%#= link_to 'Back', users_path %>
